@@ -53,8 +53,9 @@ class VendorHandler(webapp2.RequestHandler):
         user = users.get_current_user()
         greeting = ('Welcome to Vendor Page, %s! (<a href="%s">sign out</a>)' %
                     (user.nickname(), users.create_logout_url('/')))
+        logout_url = users.create_logout_url('/')
         template = jinja_env.get_template("templates/vendorhub.html")
-        self.response.write(template.render({}))
+        self.response.write(template.render({"logout_url": logout_url}))
         self.response.out.write(greeting)
         
 class HRHandler(webapp2.RequestHandler):
@@ -62,8 +63,9 @@ class HRHandler(webapp2.RequestHandler):
         user = users.get_current_user()
         greeting = ('Welcome to HR Page, %s! (<a href="%s">sign out</a>)' %
                     (user.nickname(), users.create_logout_url('/')))
+        logout_url = users.create_logout_url('/')
         template = jinja_env.get_template("templates/hrhub.html")
-        self.response.write(template.render({}))
+        self.response.write(template.render({"logout_url": logout_url}))
         self.response.out.write(greeting)
 
 class SignInOrRegisterHandler(webapp2.RequestHandler):
