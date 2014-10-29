@@ -21,7 +21,7 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
-from models import MementoUser
+from models import MementoUser, Memento
 
 
 jinja_env = jinja2.Environment(
@@ -29,6 +29,7 @@ jinja_env = jinja2.Environment(
   autoescape=True)
 
 MEMENTO_USER_KEY = ndb.Key("Entity", "movieQuote_root")
+MEMENTO_KEY = ndb.Key("Entity", "memento_root")
 class MyHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
@@ -67,6 +68,24 @@ class HRHandler(webapp2.RequestHandler):
         template = jinja_env.get_template("templates/hrhub.html")
         self.response.write(template.render({"logout_url": logout_url}))
         self.response.out.write(greeting)
+
+class CreateMementoHandler(webapp2.RequestHandler):
+    def get(self):
+        memento_name = "MEMENTO_NAME2"
+        alreadyExists = ndb.gql("SELECT * FROM Memento WHERE memento_name = :1", memento_name)
+        if (alreadyExists.count(limit=1000) == 0):
+            new_memento = Memento(parent = MEMENTO_KEY, memento_name = memento_name, event = "BIRTHDAY", item = "CUPCAKE")
+            new_memento.put()
+        self.redirect("/HRHub")
+
+class DeleteMementoHandler(webapp2.RequestHandler):
+    def get(self):
+        memento_name = "MEMENTO_NAME2"
+        memento_to_delete = ndb.gql("SELECT * FROM Memento WHERE memento_name = :1", memento_name)
+        for m in memento_to_delete:
+            m.key.delete()
+        self.redirect("/HRHub")
+
 
 class SignInOrRegisterHandler(webapp2.RequestHandler):
     def get(self):
@@ -109,5 +128,7 @@ app = webapp2.WSGIApplication([
     ('/VendorHub', VendorHandler),
     ('/HRHub', HRHandler),
     ('/SignInOrRegister', SignInOrRegisterHandler),
-    ('/RegisterUser', RegisterUserHandler)
+    ('/RegisterUser', RegisterUserHandler),
+    ('/CreateMemento', CreateMementoHandler),
+    ('/DeleteMemento', DeleteMementoHandler)
 ], debug=True)
