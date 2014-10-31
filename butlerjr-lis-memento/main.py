@@ -66,21 +66,22 @@ class HRHandler(webapp2.RequestHandler):
                     (user.nickname(), users.create_logout_url('/')))
         logout_url = users.create_logout_url('/')
         template = jinja_env.get_template("templates/hrhub.html")
-        self.response.write(template.render({"logout_url": logout_url}))
+        all_mementos = Memento.query(ancestor=MEMENTO_KEY)
+        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos}))
         self.response.out.write(greeting)
 
 class CreateMementoHandler(webapp2.RequestHandler):
-    def get(self):
-        memento_name = "MEMENTO_NAME2"
+    def post(self):
+        memento_name = self.request.get("name")
         alreadyExists = ndb.gql("SELECT * FROM Memento WHERE memento_name = :1", memento_name)
         if (alreadyExists.count(limit=1000) == 0):
-            new_memento = Memento(parent = MEMENTO_KEY, memento_name = memento_name, event = "BIRTHDAY", item = "CUPCAKE")
+            new_memento = Memento(parent = MEMENTO_KEY, memento_name = memento_name, event = self.request.get("event"), item = self.request.get("item"))
             new_memento.put()
         self.redirect("/HRHub")
 
 class DeleteMementoHandler(webapp2.RequestHandler):
-    def get(self):
-        memento_name = "MEMENTO_NAME2"
+    def post(self):
+        memento_name = self.request.get("memento_to_delete_name")
         memento_to_delete = ndb.gql("SELECT * FROM Memento WHERE memento_name = :1", memento_name)
         for m in memento_to_delete:
             m.key.delete()
@@ -129,6 +130,6 @@ app = webapp2.WSGIApplication([
     ('/HRHub', HRHandler),
     ('/SignInOrRegister', SignInOrRegisterHandler),
     ('/RegisterUser', RegisterUserHandler),
-    ('/CreateMemento', CreateMementoHandler),
+    ('/addmemento', CreateMementoHandler),
     ('/DeleteMemento', DeleteMementoHandler)
 ], debug=True)

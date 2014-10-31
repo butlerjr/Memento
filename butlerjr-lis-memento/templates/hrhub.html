@@ -1,141 +1,269 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Memento - HR Hub</title>
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-  <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css" />
+<title>Memento - HR Hub</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css"
+	href="/static/stylesheets/style.css" />
+<link href='http://fonts.googleapis.com/css?family=Satisfy'
+	rel='stylesheet' type='text/css'>
+<style>
+.quote-container {
+	margin-top: 50px;
+	position: relative;
+}
+
+.note {
+	color: #333;
+	position: relative;
+	width: 300px;
+	margin: 0 auto;
+	padding: 20px;
+	font-family: Satisfy;
+	font-size: 30px;
+	box-shadow: 0 10px 10px 2px rgba(0, 0, 0, 0.3);
+}
+
+.note .author {
+	display: block;
+	margin: 40px 0 0 0;
+	text-align: right;
+}
+
+.yellow {
+	background: #eae672;
+	-webkit-transform: rotate(2deg);
+	-moz-transform: rotate(2deg);
+	-o-transform: rotate(2deg);
+	-ms-transform: rotate(2deg);
+	transform: rotate(2deg);
+}
+
+.pin {
+	background-color: #aaa;
+	display: block;
+	height: 32px;
+	width: 2px;
+	position: absolute;
+	left: 50%;
+	top: -16px;
+	z-index: 1;
+}
+
+.pin:after {
+	background-color: #A31;
+	background-image: radial-gradient(25% 25%, circle, hsla(0, 0%, 100%, .3),
+		hsla(0, 0%, 0%, .3));
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, .1), inset 3px 3px 3px
+		hsla(0, 0%, 100%, .2), inset -3px -3px 3px hsla(0, 0%, 0%, .2), 23px
+		20px 3px hsla(0, 0%, 0%, .15);
+	content: '';
+	height: 12px;
+	left: -5px;
+	position: absolute;
+	top: -10px;
+	width: 12px;
+}
+
+.pin:before {
+	background-color: hsla(0, 0%, 0%, 0.1);
+	box-shadow: 0 0 .25em hsla(0, 0%, 0%, .1);
+	content: '';
+	height: 24px;
+	width: 2px;
+	left: 0;
+	position: absolute;
+	top: 8px;
+	transform: rotate(57.5deg);
+	-moz-transform: rotate(57.5deg);
+	-webkit-transform: rotate(57.5deg);
+	-o-transform: rotate(57.5deg);
+	-ms-transform: rotate(57.5deg);
+	transform-origin: 50% 100%;
+	-moz-transform-origin: 50% 100%;
+	-webkit-transform-origin: 50% 100%;
+	-ms-transform-origin: 50% 100%;
+	-o-transform-origin: 50% 100%;
+}
+</style>
 </head>
-	
+
 
 <body>
 
 	<nav class="navbar navbar-default" role="navigation">
-  <!-- Brand and toggle get grouped for better mobile display -->
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="#">Memento</a>
-  </div>
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Memento</a>
+		</div>
 
-  <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Calendar</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-          <li class="divider"></li>
-          <li><a href="#">One more separated link</a></li>
-        </ul>
-      </li>
-      <li><a data-toggle="modal" data-target="#insert-memento-modal" href="#">Add a Memento</a></li>
-    </ul>
-    
-    <ul class="nav navbar-nav navbar-right">
-      
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Logged in as HR PERSON <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Account Settings</a></li>
-          <li><a href={{logout_url}}>Log out</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-        </ul>
-      </li>
-    </ul>
-  </div><!-- /.navbar-collapse -->
-</nav>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse"
+			id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#">Calendar</a></li>
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown">Messages <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+						<li class="divider"></li>
+						<li><a href="#">One more separated link</a></li>
+					</ul></li>
+				<li><a data-toggle="modal" data-target="#insert-memento-modal"
+					href="#">Add a Memento</a></li>
+				<li><a data-toggle="modal" data-target="#delete-memento-modal"
+					href="#">Delete a Memento</a></li>
+			</ul>
 
+			<ul class="nav navbar-nav navbar-right">
 
-<div class="jumbotron">
-  <h3>Hello, HR PERSON!</h3>
-
-  <div class="row">
-  <div class="col-sm-6 col-md-4">
-    <div class="thumbnail">
-      <img data-src="holder.js/300x300" alt="...">
-      <div class="caption">
-        <h3>Memento 1</h3>
-        <p>...</p>
-        <p><a href="#" class="btn btn-primary" role="button">Edit</a> <a href="#" class="btn btn-default" role="button">Delete</a></p>
-      </div>
-    </div>
-    <div class="thumbnail">
-      <img data-src="holder.js/300x300" alt="...">
-      <div class="caption">
-        <h3>Memento 2</h3>
-        <p>...</p>
-        <p><a href="#" class="btn btn-primary" role="button">Edit</a> <a href="#" class="btn btn-default" role="button">Delete</a></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown">Logged in as HR PERSON <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Account Settings</a></li>
+						<li><a href={{logout_url}}>Log out</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+					</ul></li>
+			</ul>
+		</div>
+		<!-- /.navbar-collapse -->
+	</nav>
 
 
- <!-- Modal -->
-    <div id='insert-memento-modal' class="modal fade" tabindex="-1" role="dialog"
-      aria-labelledby="Insert memento" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Add a Memento</h4>
-          </div>
-          <form action="/addmemento" method="POST" class="form-horizontal" role="form">
-            <input name="entity_key" type="text" class="hidden">
-            <div class="modal-body">
-              <div class="form-group">
-                <label for="quote-input" class="col-sm-2 control-label">Memento Name:</label>
-                <div class="col-sm-10">
-                  <input id="name-input" name="name" type="text" class="form-control" placeholder="name">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="event-input" class="col-sm-2 control-label">Event: </label>
-                <div class="col-sm-10">
-                  <input id="event-input" name="event" type="text" class="form-control" placeholder="birthday">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="item-input" class="col-sm-2 control-label">Item: </label>
-                <div class="col-sm-10">
-                  <input id="item-input" name="item" type="text" class="form-control" placeholder="an orange cupcake">
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Add Memento</button>
-            </div>
-          </form>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+	<div class="jumbotron">
+		<h3>Hello, HR PERSON!</h3>
+		{% for memento in all_mementos %}
+		<div class="quote-container">
+			<i class="pin"></i>
+			<blockquote class="note yellow">
+					<input type="text" name="entity_key" class="hidden">
+					<h3>{{memento.memento_name}} Memento</h3>
+					<br />
+					<p>Event: {{memento.event}}</p>
+					<br />
+					<p>Item: {{memento.item}}</p>
+					<br />
+				</form>
+			</blockquote>
+		</div>
+		{% endfor %}
 
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+	</div>
+
+
+	<!-- Modal -->
+	<div id='insert-memento-modal' class="modal fade" tabindex="-1"
+		role="dialog" aria-labelledby="Insert memento" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Add a Memento</h4>
+				</div>
+				<form action="/addmemento" method="POST" class="form-horizontal"
+					role="form">
+					<input name="entity_key" type="text" class="hidden">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="quote-input" class="col-sm-2 control-label">Memento
+								Name:</label>
+							<div class="col-sm-10">
+								<input id="name-input" name="name" type="text"
+									class="form-control" placeholder="Memento Name">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="event-input" class="col-sm-2 control-label">Event:
+							</label>
+							<div class="col-sm-10">
+								<input id="event-input" name="event" type="text"
+									class="form-control" placeholder="Event Type">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="item-input" class="col-sm-2 control-label">Item:
+							</label>
+							<div class="col-sm-10">
+								<input id="item-input" name="item" type="text"
+									class="form-control" placeholder="Item Type">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-primary">Add Memento</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- Modal -->
+	<div id='delete-memento-modal' class="modal fade" tabindex="-1"
+		role="dialog" aria-labelledby="Delete memento" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Delete a Memento</h4>
+				</div>
+				<form action="/DeleteMemento" method="POST" class="form-horizontal"
+					role="form">
+					<div class="modal-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Memento Name</label>
+							<div class="col-sm-10">
+								<input id="name-input" name="memento_to_delete_name" type="text"
+									class="form-control" placeholder="name">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-primary">Delete
+							Memento</button>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  <script src="/static/js/javascript.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="/static/js/javascript.js"></script>
 </body>
 </html>
