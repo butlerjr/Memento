@@ -158,9 +158,9 @@
 					<input type="text" name="entity_key" class="hidden">
 					<h3>{{memento.memento_name}} Memento</h3>
 					<br />
-					<p>Event: {{memento.event}}</p>
+					<p>Event: {{memento.event.get().event_name}}</p>
 					<br />
-					<p>Item: {{memento.item}}</p>
+					<p>Item: {{memento.item.get().item_name}}</p>
 					<br />
 				</form>
 			</blockquote>
@@ -198,8 +198,11 @@
 							<label for="event-input" class="col-sm-2 control-label">Event:
 							</label>
 							<div class="col-sm-10">
-								<input id="event-input" name="event" type="text"
-									class="form-control" placeholder="Event Type">
+								<select id="type-input" name="type" class="form-control">
+									{% for memento in all_mementos %}
+									<option value = "unknown"> {{memento.event.get().event_name}} </option>
+									{% endfor %}
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
