@@ -209,8 +209,13 @@
 							<label for="item-input" class="col-sm-2 control-label">Item:
 							</label>
 							<div class="col-sm-10">
-								<input id="item-input" name="item" type="text"
-									class="form-control" placeholder="Item Type">
+								<select id="item-input" name="item" class="form-control">
+									{% for vendor in all_vendors %}
+										{% for item in vendor.inventory %}
+									<option value = "unknown"> {{vendor.company_name}} || {{item.get().item_name}} (${{item.get().item_price}}/unit) </option>
+										{% endfor %}
+									{% endfor %}
+								</select>
 							</div>
 						</div>
 					</div>

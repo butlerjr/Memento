@@ -93,7 +93,8 @@ class HRHandler(webapp2.RequestHandler):
         logout_url = users.create_logout_url('/')
         template = jinja_env.get_template("templates/hrhub.html")
         all_mementos = Memento.query(ancestor=curr_memento_user_key)
-        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos}))
+        all_vendors = Vendor.query(ancestor=MEMENTO_USER_KEY)
+        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos, "all_vendors":all_vendors}))
         self.response.out.write(greeting)
 
 class CreateMementoHandler(webapp2.RequestHandler):
@@ -131,6 +132,8 @@ class AddItemHandler(webapp2.RequestHandler):
         if (alreadyExists.count(limit=1000) == 0):
             new_item = Item(parent = curr_memento_user_key, item_name = item_name, item_price = item_price)
             new_item.put()
+            curr_memento_user.user_data.get().inventory.append(new_item.key)
+            curr_memento_user.user_data.get().put()
         self.redirect("/VendorHub")
 
 
@@ -167,7 +170,7 @@ class RegisterUserHandler(webapp2.RequestHandler):
                                         user_data = None)
             new_memento_user.put()
             if new_memento_user.isVendor:
-                new_Vendor = Vendor(parent = new_memento_user.key, company_name="test_company", inventory=[])
+                new_Vendor = Vendor(parent = new_memento_user.key, company_name=self.request.get("company"), inventory=[])
                 new_Vendor.put()
                 new_memento_user.user_data = new_Vendor.key
                 new_memento_user.put()
