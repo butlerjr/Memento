@@ -23,7 +23,13 @@ class Item(ndb.Model):
 class Event(ndb.Model):
     
     event_name = ndb.StringProperty()
-    occurrences = ndb.DateProperty(repeated = True);
+    occurrences = ndb.KeyProperty(repeated = True)
+    
+class Employee(ndb.Model):
+    employee_name = ndb.StringProperty()
+    employee_birthday = ndb.DateProperty()
+    employee_anniversary = ndb.DateProperty()
+    employee_maternity_start = ndb.DateProperty()
     
 class Vendor(ndb.Model):
     
