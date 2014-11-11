@@ -2,6 +2,7 @@
 /*sec-yellow = #339922*/
 .edit-button {
   border: 1px solid #fff;
+  border-radius: 5px;
   padding: 8px;
   color: #fff;
   text-align: center;
@@ -11,11 +12,16 @@
 }
 .delete-button {
   border: 1px solid #fff;
+  border-radius: 5px;
   padding: 8px;
   color: #fff;
   text-align: center;
   float: left;
   width: 49%;
+}
+.hover-button {
+  color: #ffd636;
+  background-color: #fff;
 }
 .memento {
   background-color: #ffd636;
