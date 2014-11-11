@@ -37,10 +37,6 @@ ITEM_KEY = ndb.Key("Entity", "item_root")
 
 FAKE_ITEM_PRICE = 3.00
 
-event_birthday = Event(parent=EVENT_KEY, event_name="Birthday", occurrences=[datetime.date(year=1986, month=3, day=5), datetime.date(year=1987, month=3, day=6)])
-event_birthday.put()
-event_anniversary = Event(parent=EVENT_KEY, event_name="Anniversary", occurrences=[datetime.date(year=1986, month=7, day=5), datetime.date(year=1987, month=2, day=6)])
-event_anniversary.put()
 item_cupcake = Item(parent=ITEM_KEY, item_name="Flying Cupcake", item_price=3.40);
 item_cupcake.put()
 class MyHandler(webapp2.RequestHandler):
@@ -110,6 +106,11 @@ class CreateMementoHandler(webapp2.RequestHandler):
             new_memento = Memento(parent = curr_memento_user_key, memento_name = memento_name, event = event_birthday.key, item = item_cupcake.key)
             new_memento.put()
         self.redirect("/HRHub")
+
+class CreateEventHandler(webapp2.RequestHandler):
+    def post(self):
+        user = users.get_current_user()
+        
 
 class DeleteMementoHandler(webapp2.RequestHandler):
     def post(self):
