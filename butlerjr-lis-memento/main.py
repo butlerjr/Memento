@@ -114,10 +114,12 @@ class CreateEventHandler(webapp2.RequestHandler):
 
 class DeleteMementoHandler(webapp2.RequestHandler):
     def post(self):
-        memento_name = self.request.get("memento_to_delete_name")
-        memento_to_delete = ndb.gql("SELECT * FROM Memento WHERE memento_name = :1", memento_name)
-        for m in memento_to_delete:
-            m.key.delete()
+        memento_key = ndb.Key(urlsafe=self.request.get("entity_key"))
+        memento_key.delete()
+#       memento_name = self.request.get("memento_to_delete_name")
+#       memento_to_delete = ndb.gql("SELECT * FROM Memento WHERE memento_name = :1", memento_name)
+#       for m in memento_to_delete:
+#            m.key.delete()
         self.redirect("/HRHub")
 
 class AddItemHandler(webapp2.RequestHandler):

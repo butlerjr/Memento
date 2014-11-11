@@ -178,16 +178,19 @@
 				<p>Event</p>
 				<p>Item<p>
 				<div class="edit-button">Edit</div>
-				<div class="delete-button">Delete</div>	
+				<button class="delete-button">Delete</button>
 			</div>
 
 				{% for memento in all_mementos %}
 				<div class="memento col-md-4">
 					<h3>{{memento.memento_name}} Memento</h3>
-					<p>Event: {{memento.event.get().event_name}}</p>
+					<p>Event: </p>
 					<p>Item: {{memento.item.get().item_name}}<p>
 					<div class="edit-button">Edit</div>
-					<div class="delete-button" data-toggle="modal" data-target="#delete-confirmation-modal">Delete</div>
+					<div class="delete-button" data-toggle="modal" data-target="#delete-confirmation-modal">Delete
+						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
+						<div class="hidden name">{{memento.memento_name}}</div>
+					</div>
 				</div>
 				{% endfor %}
 
@@ -206,7 +209,7 @@
 				<input type="text" name="entity_key" class="hidden">
 				<h3>{{memento.memento_name}} Memento</h3>
 				<br />
-				<p>Event: {{memento.event.get().event_name}}</p>
+				<p>Event: </p>
 				<br />
 				<p>Item: {{memento.item.get().item_name}}</p>
 				<br />
@@ -249,7 +252,7 @@
 								<select id="type-input" name="type" class="form-control">
 									{% for memento in all_mementos %}
 									<option value="unknown">
-										{{memento.event.get().event_name}}</option> {% endfor %}
+										</option> {% endfor %}
 								</select>
 							</div>
 						</div>
@@ -317,17 +320,21 @@
 	<div id="delete-confirmation-modal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
+				<form action="/DeleteMemento" method="POST" class="form-horizontal"
+					  role="form">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					<h4 class="modal-title">Confirm Delete</h4>
 				</div>
 				<div class="modal-body">
-					<p>Are you sure you'd like to delete NAME Memento?</p>
+					<input name="entity_key">
+					<p>Are you sure to delete this <text id="name">NAME</text> Memento?</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 					<button type="submit" class="btn btn-primary">Delete</button>
 				</div>
+				</form>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->

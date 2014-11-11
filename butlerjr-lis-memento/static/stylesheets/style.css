@@ -9,6 +9,7 @@
   float: left;
   width: 49%;
   margin-right: 2%;
+  background-color: #ffd636;
 }
 .delete-button {
   border: 1px solid #fff;
@@ -18,6 +19,7 @@
   text-align: center;
   float: left;
   width: 49%;
+  background-color: #ffd636;
 }
 .hover-button {
   color: #ffd636;

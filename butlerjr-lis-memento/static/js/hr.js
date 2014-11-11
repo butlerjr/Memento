@@ -18,7 +18,10 @@ var main = function() {
 
     $(".delete-button").click(
         function(){
-
+            name = $(this).find(".name").html();
+            entityKey = $(this).find(".entity-key").html();
+            $("#delete-confirmation-modal #name").html(name);
+            $("#delete-confirmation-modal input[name=entity_key]").val(entityKey).prop("disabled", false);
         }
     );
 
