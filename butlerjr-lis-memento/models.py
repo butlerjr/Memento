@@ -24,7 +24,7 @@ class Item(ndb.Model):
 class Event(ndb.Model):
     
     event_name = ndb.StringProperty()
-    occurrences = ndb.KeyProperty(repeated = True)
+    occurrences = ndb.StringProperty(repeated = True)
     
 class Employee(ndb.Model):
     employee_name = ndb.StringProperty()
@@ -48,10 +48,8 @@ class HRUser(ndb.Model):
 
 class Order(ndb.Model):
     
-    item = ndb.KeyProperty(repeated=True)
     to_company = ndb.KeyProperty()
-    from_company = ndb.KeyProperty()
-    delivery_date = ndb.DateTimeProperty()
+    memento = ndb.KeyProperty(repeated=True)
     
     
     

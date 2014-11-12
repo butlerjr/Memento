@@ -12,12 +12,12 @@
 	href="/static/stylesheets/style.css" />
 <link href='http://fonts.googleapis.com/css?family=Satisfy'
 	rel='stylesheet' type='text/css'>
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<!-- Latest compiled and minified JavaScript -->
-	<script
-			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<script src="/static/js/hr.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="/static/js/hr.js"></script>
 <style>
 .quote-container {
 	margin-top: 50px;
@@ -126,6 +126,7 @@
 					href="#">Delete a Memento</a></li>
 				<li><a data-toggle="modal" data-target="#create-event-modal"
 					href="#">Define an Event</a></li>
+				<li><a href="/OpenFile">Upload CSV</a>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
@@ -166,6 +167,7 @@
 					<div class="delete-button">Delete</div>
 
 				</div>
+
 			<div class="memento col-md-4">
 				<h3>Fake Testing Momento no.2 </h3>
 				<p>All I want for my birthday</p>
@@ -176,7 +178,7 @@
 			<div class="memento col-md-4">
 				<h3>Memento Name</h3>
 				<p>Event</p>
-				<p>Item<p>
+				<p>Item</p>
 				<div class="edit-button">Edit</div>
 				<button class="delete-button">Delete</button>
 			</div>
@@ -184,10 +186,13 @@
 				{% for memento in all_mementos %}
 				<div class="memento col-md-4">
 					<h3>{{memento.memento_name}} Memento</h3>
-					<p>Event: </p>
-					<p>Item: {{memento.item.get().item_name}}<p>
+					<p>Event: {{memento.event.get().event_name}}</p>
+					<p>Item: {{memento.item.get().item_name}}
+					<p>
 					<div class="edit-button">Edit</div>
-					<div class="delete-button" data-toggle="modal" data-target="#delete-confirmation-modal">Delete
+					<div class="delete-button" data-toggle="modal"
+						data-target="#delete-confirmation-modal">
+						Delete
 						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
 						<div class="hidden name">{{memento.memento_name}}</div>
 					</div>
@@ -199,28 +204,6 @@
 		</div>
 	</div>
 
-
-	<div class="jumbotron">
-		<h3>Hello, HR PERSON!</h3>
-		{% for memento in all_mementos %}
-		<div class="quote-container">
-			<i class="pin"></i>
-			<blockquote class="note yellow">
-				<input type="text" name="entity_key" class="hidden">
-				<h3>{{memento.memento_name}} Memento</h3>
-				<br />
-				<p>Event: </p>
-				<br />
-				<p>Item: {{memento.item.get().item_name}}</p>
-				<br />
-				</form>
-			</blockquote>
-		</div>
-		{% endfor %}
-
-
-
-	</div>
 
 
 	<!-- Modal -->
@@ -249,10 +232,10 @@
 							<label for="event-input" class="col-sm-2 control-label">Event:
 							</label>
 							<div class="col-sm-10">
-								<select id="type-input" name="type" class="form-control">
-									{% for memento in all_mementos %}
-									<option value="unknown">
-										</option> {% endfor %}
+								<select id="event_input" name="event_input" class="form-control">
+									{% for event in all_events %}
+									<option value="{{event.event_name}}">{{event.event_name}}
+									</option> {% endfor %}
 								</select>
 							</div>
 						</div>
@@ -260,10 +243,10 @@
 							<label for="item-input" class="col-sm-2 control-label">Item:
 							</label>
 							<div class="col-sm-10">
-								<select id="item-input" name="item" class="form-control">
-									{% for vendor in all_vendors %} {% for item in vendor.inventory
-									%}
-									<option value="unknown">{{vendor.company_name}} ||
+								<select id="item_input" name="item_input" class="form-control">
+									{% for vendor in all_vendors %} {% for item in
+									vendor.inventory%}
+									<option value="{{item.get().item_name}}">{{vendor.company_name}} ||
 										{{item.get().item_name}} (${{item.get().item_price}}/unit)</option> {%
 									endfor %} {% endfor %}
 								</select>
@@ -321,23 +304,32 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action="/DeleteMemento" method="POST" class="form-horizontal"
-					  role="form">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title">Confirm Delete</h4>
-				</div>
-				<div class="modal-body">
-					<input name="entity_key">
-					<p>Are you sure to delete this <text id="name">NAME</text> Memento?</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-primary">Delete</button>
-				</div>
+					role="form">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">Confirm Delete</h4>
+					</div>
+					<div class="modal-body">
+						<input name="entity_key">
+						<p>
+							Are you sure to delete this
+							<text id="name">NAME</text>
+							Memento?
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-primary">Delete</button>
+					</div>
 				</form>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
 
 	<!-- Modal -->
 	<div id='create-event-modal' class="modal fade" tabindex="-1"
@@ -362,17 +354,19 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Event Source</label>
 							<div class="col-sm-10">
-								<select id="event_source" name="event_source" class="Form-control">
-								{% for model_field in model_fields %}
-									<option value="test"> {{model_field}} </option>
-								{% endfor %}
+								<select id="event_source" name="event_source"
+									class="Form-control"> {% for model_field in
+									model_fields %}
+									<option value="{{model_field}}">{{model_field}}</option> {%
+									endfor %}
 								</select>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button type="submit" class="btn btn-primary">Define Event</button>
+						<button type="submit" class="btn btn-primary">Define
+							Event</button>
 					</div>
 				</form>
 			</div>

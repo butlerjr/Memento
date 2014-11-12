@@ -19,13 +19,15 @@ import json
 import logging
 import os
 
+
 from google.appengine.api import users
 from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
-from models import MementoUser, Memento, Vendor, HRUser, Event, Item, Employee
+from models import MementoUser, Memento, Vendor, HRUser, Event, Item, Employee, Order
 import models
+
 
 
 jinja_env = jinja2.Environment(
@@ -85,15 +87,13 @@ class HRHandler(webapp2.RequestHandler):
         memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
-        """
-        bob = Employee(parent = curr_memento_user_key,
-                       employee_name = "Bob",
-                       employee_id = 12345678, 
-                       employee_birthday = datetime.date(1987, 11, 3), 
-                       employee_anniversary = datetime.date(1987, 11, 3), 
-                       employee_maternity_start= datetime.date(1987, 11, 3))
+        bob = Employee(parent = MEMENTO_USER_KEY,
+                       employee_name = "Sarah Keyes",
+                       employee_id = 12345679, 
+                       employee_birthday = datetime.date(1987, 10, 3), 
+                       employee_anniversary = datetime.date(1987, 02, 3), 
+                       employee_maternity_start= datetime.date(1987, 1, 3))
         bob.put()
-        """
         
         greeting = ('Welcome to HR Page, %s! (<a href="%s">sign out</a>)' %
                     (user.nickname(), users.create_logout_url('/')))
@@ -101,28 +101,51 @@ class HRHandler(webapp2.RequestHandler):
         template = jinja_env.get_template("templates/hrhub.html")
         all_mementos = Memento.query(ancestor=curr_memento_user_key)
         all_vendors = Vendor.query(ancestor=MEMENTO_USER_KEY)
+        all_events = Event.query(ancestor=curr_memento_user_key)
         sample_employee = Employee.query(ancestor=curr_memento_user_key).get()
         model_fields = sample_employee.to_dict()
         jsonStr = json.dumps({"foo":"bar"})
         print(jsonStr)
         jsonDic = json.loads(jsonStr)
         print(jsonDic["foo"])
-        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos, "all_vendors":all_vendors, "model_fields":model_fields}))
+        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos, "all_events":all_events, "all_vendors":all_vendors, "model_fields":model_fields}))
         self.response.out.write(greeting)
-        
+  
 
 class CreateMementoHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         memento_name = self.request.get("name")
+        event_name = self.request.get("event_input")
+        item_name = self.request.get("item_input")
         memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
+        
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
+        
+        event = Event.query(ancestor=curr_memento_user_key).filter(ndb.GenericProperty("event_name") == event_name).get()
+        item = Item.query(ancestor=MEMENTO_USER_KEY).filter(ndb.GenericProperty("item_name") == item_name).get()
         existing_mementos = Memento.query(ancestor=curr_memento_user_key)
         alreadyExists = existing_mementos.filter(ndb.GenericProperty("memento_name") == memento_name)
         if (alreadyExists.count(limit=1000) == 0):
-            new_memento = Memento(parent = curr_memento_user_key, memento_name = memento_name, event = None, item = item_cupcake.key)
+            new_memento = Memento(parent = curr_memento_user_key, memento_name = memento_name, event = event.key, item = item.key)
             new_memento.put()
+            existing_orders = Order.query(ancestor=MEMENTO_USER_KEY)
+            orderAlreadyExists = existing_orders.filter(ndb.GenericProperty("to_company") == curr_memento_user_key)
+            hasOrders = False
+            existing_order = None
+            for order in orderAlreadyExists:
+                if (order.key.parent() == item.key.parent()):
+                    existing_order = order
+                    hasOrders = True
+                    break
+            if hasOrders:
+                existing_order.memento.append(new_memento.key)
+                existing_order.put()
+                print "Memento Keys:" + str(existing_order.memento)
+            else:
+                new_order = Order(parent = item.key.parent(), to_company = curr_memento_user_key, memento=[new_memento.key])
+                new_order.put()
         self.redirect("/HRHub")
 
 class CreateEventHandler(webapp2.RequestHandler):
@@ -132,11 +155,6 @@ class CreateEventHandler(webapp2.RequestHandler):
         memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
-        
-        
-        
-        
-        
         
 
 class DeleteMementoHandler(webapp2.RequestHandler):
@@ -212,6 +230,30 @@ class RegisterUserHandler(webapp2.RequestHandler):
                 new_memento_user.put()
                 self.redirect('/HRHub')
 
+class DefineEventHandler(webapp2.RequestHandler):
+    def post(self):
+        user = users.get_current_user()
+        memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
+        curr_memento_user = memento_user_query.get()
+        curr_memento_user_key = curr_memento_user.key
+        
+        selected_field = self.request.get("event_source")
+        
+        occurrences = ndb.gql("SELECT * FROM Employee")
+        name_and_date = []
+        
+        
+        for occurrence in occurrences:
+            employee_dict = {"employee_name" : occurrence.employee_name, "employee_maternity_start": occurrence.employee_maternity_start, "employee_birthday": occurrence.employee_birthday, "employee_anniversary":occurrence.employee_anniversary, "employee_id":occurrence.employee_id}
+            dict_to_add = {employee_dict["employee_name"]: str(employee_dict[selected_field])}
+            jsonStr = json.dumps(dict_to_add)
+            name_and_date.append(jsonStr)
+            
+        
+        new_event = Event(parent=curr_memento_user_key, event_name=self.request.get("event_name"), occurrences=name_and_date)
+        new_event.put()
+        self.redirect('HRHub')
+
 app = webapp2.WSGIApplication([
     ('/', MyHandler),
     ('/VendorHub', VendorHandler),
@@ -220,5 +262,6 @@ app = webapp2.WSGIApplication([
     ('/RegisterUser', RegisterUserHandler),
     ('/addmemento', CreateMementoHandler),
     ('/DeleteMemento', DeleteMementoHandler),
-    ('/AddItem', AddItemHandler)
+    ('/AddItem', AddItemHandler),
+    ('/DefineEvent', DefineEventHandler)
 ], debug=True)
