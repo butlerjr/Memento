@@ -25,7 +25,7 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
-from models import MementoUser, Memento, Vendor, HRUser, Event, Item, Employee
+from models import MementoUser, Memento, Vendor, HRUser, Event, Item, Employee, Order
 import models
 
 
@@ -130,6 +130,22 @@ class CreateMementoHandler(webapp2.RequestHandler):
         if (alreadyExists.count(limit=1000) == 0):
             new_memento = Memento(parent = curr_memento_user_key, memento_name = memento_name, event = event.key, item = item.key)
             new_memento.put()
+            existing_orders = Order.query(ancestor=MEMENTO_USER_KEY)
+            orderAlreadyExists = existing_orders.filter(ndb.GenericProperty("to_company") == curr_memento_user_key)
+            hasOrders = False
+            existing_order = None
+            for order in orderAlreadyExists:
+                if (order.key.parent() == item.key.parent()):
+                    existing_order = order
+                    hasOrders = True
+                    break
+            if hasOrders:
+                existing_order.memento.append(new_memento.key)
+                existing_order.put()
+                print "Memento Keys:" + str(existing_order.memento)
+            else:
+                new_order = Order(parent = item.key.parent(), to_company = curr_memento_user_key, memento=[new_memento.key])
+                new_order.put()
         self.redirect("/HRHub")
 
 class CreateEventHandler(webapp2.RequestHandler):

@@ -48,10 +48,8 @@ class HRUser(ndb.Model):
 
 class Order(ndb.Model):
     
-    item = ndb.KeyProperty(repeated=True)
     to_company = ndb.KeyProperty()
-    from_company = ndb.KeyProperty()
-    delivery_date = ndb.DateTimeProperty()
+    memento = ndb.KeyProperty(repeated=True)
     
     
     
