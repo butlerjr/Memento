@@ -7,6 +7,12 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
   <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css" />
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script
+          src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="/static/js/vendor.js"></script>
 </head>
   
 
@@ -61,10 +67,90 @@
   </div><!-- /.navbar-collapse -->
 </nav>
 
+  <div class="container">
+    <div class="jumbotron">
+      <h2>
+        Welcome to Memento, Vendor!
+        <h2>
+          <p>Sell your products to businesses that make mass orders.
+          <p>
+    </div>
 
-<div class="jumbotron">
-  <h3>Hello, VENDOR!</h3>
-</div>
+
+    <div class="row">
+      {% for item in curr_vendor_items %}
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="/static/pic/gift.jpg">
+          <div class="caption">
+            <h3>{{item.item_name}}</h3>
+            <p>Best seller, in excellent condition</p>
+
+            <div class="edit-button">Change Price</div>
+            <div class="delete-button">Delete</div>
+            <br>
+            <br>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="/static/pic/ftssocks.jpg">
+          <div class="caption">
+            <h3>FTS Socks</h3>
+            <p>Soft, fuzzy, and full of swag</p>
+            <div class="edit-button">Change Price</div>
+            <div class="delete-button">Delete</div>
+            <br>
+            <br>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="/static/pic/chocolatecupcake.jpg">
+          <div class="caption">
+            <h3>Chocolate Cupcake</h3>
+            <p>Soft, chococatey, and sprinkled with rainbow</p>
+            <div class="edit-button">Change Price</div>
+            <div class="delete-button">Delete</div>
+            <br>
+            <br>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="/static/pic/gift.jpg">
+          <div class="caption">
+            <h3>Fake Product</h3>
+            <p>An empty gift box</p>
+            <div class="edit-button">Change Price</div>
+            <div class="delete-button">Delete</div>
+            <br>
+            <br>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+  <div class="list-group">
+    <a class="list-group-item">Dapibus ac facilisis in</a>
+    <div class="panel-body">
+      <p> Price: $100</p>
+    </div>
+    <a href="#" class="list-group-item">Morbi leo risus</a>
+    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+    <a href="#" class="list-group-item">Vestibulum at eros</a>
+    {% for item in curr_vendor_items %}
+    <a href="#" class="list-group-item">{{item.item_name}}</a>
+    {% endfor %}
+  </div>
+
+  </div>
 
 <table>
 {% for item in curr_vendor_items %}
