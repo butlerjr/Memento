@@ -363,7 +363,9 @@
 							<label class="col-sm-2 control-label">Event Source</label>
 							<div class="col-sm-10">
 								<select id="event_source" name="event_source" class="Form-control">
-								
+								{% for model_field in model_fields %}
+									<option value="test"> {{model_field}} </option>
+								{% endfor %}
 								</select>
 							</div>
 						</div>

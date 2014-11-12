@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 import datetime
+import json
 import logging
 import os
 
@@ -23,7 +24,8 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
-from models import MementoUser, Memento, Vendor, HRUser, Event, Item
+from models import MementoUser, Memento, Vendor, HRUser, Event, Item, Employee
+import models
 
 
 jinja_env = jinja2.Environment(
@@ -83,6 +85,15 @@ class HRHandler(webapp2.RequestHandler):
         memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
+        """
+        bob = Employee(parent = curr_memento_user_key,
+                       employee_name = "Bob",
+                       employee_id = 12345678, 
+                       employee_birthday = datetime.date(1987, 11, 3), 
+                       employee_anniversary = datetime.date(1987, 11, 3), 
+                       employee_maternity_start= datetime.date(1987, 11, 3))
+        bob.put()
+        """
         
         greeting = ('Welcome to HR Page, %s! (<a href="%s">sign out</a>)' %
                     (user.nickname(), users.create_logout_url('/')))
@@ -90,8 +101,15 @@ class HRHandler(webapp2.RequestHandler):
         template = jinja_env.get_template("templates/hrhub.html")
         all_mementos = Memento.query(ancestor=curr_memento_user_key)
         all_vendors = Vendor.query(ancestor=MEMENTO_USER_KEY)
-        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos, "all_vendors":all_vendors}))
+        sample_employee = Employee.query(ancestor=curr_memento_user_key).get()
+        model_fields = sample_employee.to_dict()
+        jsonStr = json.dumps({"foo":"bar"})
+        print(jsonStr)
+        jsonDic = json.loads(jsonStr)
+        print(jsonDic["foo"])
+        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos, "all_vendors":all_vendors, "model_fields":model_fields}))
         self.response.out.write(greeting)
+        
 
 class CreateMementoHandler(webapp2.RequestHandler):
     def post(self):
@@ -103,13 +121,22 @@ class CreateMementoHandler(webapp2.RequestHandler):
         existing_mementos = Memento.query(ancestor=curr_memento_user_key)
         alreadyExists = existing_mementos.filter(ndb.GenericProperty("memento_name") == memento_name)
         if (alreadyExists.count(limit=1000) == 0):
-            new_memento = Memento(parent = curr_memento_user_key, memento_name = memento_name, event = event_birthday.key, item = item_cupcake.key)
+            new_memento = Memento(parent = curr_memento_user_key, memento_name = memento_name, event = None, item = item_cupcake.key)
             new_memento.put()
         self.redirect("/HRHub")
 
 class CreateEventHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
+        
+        memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
+        curr_memento_user = memento_user_query.get()
+        curr_memento_user_key = curr_memento_user.key
+        
+        
+        
+        
+        
         
 
 class DeleteMementoHandler(webapp2.RequestHandler):

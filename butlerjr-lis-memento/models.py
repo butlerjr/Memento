@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb 
 
+
 class MementoUser(ndb.Model):
 
     user_name = ndb.StringProperty()
@@ -27,9 +28,13 @@ class Event(ndb.Model):
     
 class Employee(ndb.Model):
     employee_name = ndb.StringProperty()
+    employee_id = ndb.IntegerProperty()
     employee_birthday = ndb.DateProperty()
     employee_anniversary = ndb.DateProperty()
     employee_maternity_start = ndb.DateProperty()
+    
+    def get_meta(self):
+        return self._meta.get_all_field_names()
     
 class Vendor(ndb.Model):
     
