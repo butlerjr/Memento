@@ -24,7 +24,7 @@ class Item(ndb.Model):
 class Event(ndb.Model):
     
     event_name = ndb.StringProperty()
-    occurrences = ndb.KeyProperty(repeated = True)
+    occurrences = ndb.StringProperty(repeated = True)
     
 class Employee(ndb.Model):
     employee_name = ndb.StringProperty()
