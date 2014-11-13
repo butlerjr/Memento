@@ -24,6 +24,7 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 import jinja2
 import webapp2
+from collections import Counter
 
 from models import MementoUser, Memento, Vendor, HRUser, Event, Item, Employee, Order
 import models
@@ -39,10 +40,7 @@ MEMENTO_KEY = ndb.Key("Entity", "memento_root")
 EVENT_KEY = ndb.Key("Entity", "event_root")
 ITEM_KEY = ndb.Key("Entity", "item_root")
 
-FAKE_ITEM_PRICE = 3.00
 
-item_cupcake = Item(parent=ITEM_KEY, item_name="Flying Cupcake", item_price=3.40);
-item_cupcake.put()
 class MyHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
@@ -76,8 +74,29 @@ class VendorHandler(webapp2.RequestHandler):
         logout_url = users.create_logout_url('/')
         template = jinja_env.get_template("templates/vendorhub.html")
         
+        curr_vendor_orders = Order.query(ancestor=curr_memento_user_key)
         
-        self.response.write(template.render({"user":user, "logout_url": logout_url, "curr_vendor_items": curr_vendor_items}))
+        print "Orders:"
+        for order in curr_vendor_orders:
+            print "Order" + str(order)
+            currPrice = 0;
+            order_thing = 0;
+            all_items_in_order = []
+            all_special_order_dict = []
+            for memento_key in order.memento:
+                item_name = memento_key.get().item.get().item_name
+                all_items_in_order.append(item_name)
+            
+            for memento_key in order.memento:
+                item_company = memento_key.get().item.parent().get().user_data.get().company_name
+                item_name = memento_key.get().item.get().item_name
+                item_price = memento_key.get().item.get().item_price
+                item_frequency = all_items_in_order.count(item_name)
+                special_order_dict = {"company": item_company, "item_name":item_name, "item_price":item_price, "item_frequency":item_frequency}
+                if special_order_dict not in all_special_order_dict:
+                    all_special_order_dict.append(special_order_dict)
+        print all_special_order_dict
+        self.response.write(template.render({"user":user, "logout_url": logout_url, "curr_vendor_items": curr_vendor_items, "orders": all_special_order_dict}))
         self.response.out.write(greeting)
         
 class HRHandler(webapp2.RequestHandler):
