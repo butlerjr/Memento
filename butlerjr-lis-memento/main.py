@@ -253,6 +253,14 @@ class DefineEventHandler(webapp2.RequestHandler):
         new_event.put()
         self.redirect('HRHub')
 
+class ViewOrderHandler(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        logout_url = users.create_logout_url('/')
+        template = jinja_env.get_template("templates/order.html")
+        self.response.write(template.render({"user":user, "logout_url": logout_url}))
+
+
 app = webapp2.WSGIApplication([
     ('/', MyHandler),
     ('/VendorHub', VendorHandler),
@@ -263,5 +271,6 @@ app = webapp2.WSGIApplication([
     ('/DeleteMemento', DeleteMementoHandler),
     ('/DeleteItem', DeleteItemHandler),
     ('/AddItem', AddItemHandler),
-    ('/DefineEvent', DefineEventHandler)
+    ('/DefineEvent', DefineEventHandler),
+    ('/vieworder', ViewOrderHandler)
 ], debug=True)

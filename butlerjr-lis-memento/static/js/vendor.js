@@ -14,7 +14,7 @@ function equalHeight(group) {
 
 var main = function() {
     console.log("Javascipt loaded successfully.");
-    $(".thumbnails").find(".thumbnail").uniformHeight();
+
 
 
     $(".delete-button").hover(
