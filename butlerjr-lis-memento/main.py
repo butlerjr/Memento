@@ -77,7 +77,7 @@ class VendorHandler(webapp2.RequestHandler):
         template = jinja_env.get_template("templates/vendorhub.html")
         
         
-        self.response.write(template.render({"logout_url": logout_url, "curr_vendor_items": curr_vendor_items}))
+        self.response.write(template.render({"user":user, "logout_url": logout_url, "curr_vendor_items": curr_vendor_items}))
         self.response.out.write(greeting)
         
 class HRHandler(webapp2.RequestHandler):
@@ -108,7 +108,7 @@ class HRHandler(webapp2.RequestHandler):
         print(jsonStr)
         jsonDic = json.loads(jsonStr)
         print(jsonDic["foo"])
-        self.response.write(template.render({"logout_url": logout_url, "all_mementos": all_mementos, "all_events":all_events, "all_vendors":all_vendors, "model_fields":model_fields}))
+        self.response.write(template.render({"user":user, "logout_url": logout_url, "all_mementos": all_mementos, "all_events":all_events, "all_vendors":all_vendors, "model_fields":model_fields}))
         self.response.out.write(greeting)
   
 
@@ -147,14 +147,6 @@ class CreateMementoHandler(webapp2.RequestHandler):
                 new_order = Order(parent = item.key.parent(), to_company = curr_memento_user_key, memento=[new_memento.key])
                 new_order.put()
         self.redirect("/HRHub")
-
-class CreateEventHandler(webapp2.RequestHandler):
-    def post(self):
-        user = users.get_current_user()
-        
-        memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
-        curr_memento_user = memento_user_query.get()
-        curr_memento_user_key = curr_memento_user.key
         
 
 class DeleteMementoHandler(webapp2.RequestHandler):
