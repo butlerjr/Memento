@@ -102,7 +102,7 @@ class HRHandler(webapp2.RequestHandler):
         all_mementos = Memento.query(ancestor=curr_memento_user_key)
         all_vendors = Vendor.query(ancestor=MEMENTO_USER_KEY)
         all_events = Event.query(ancestor=curr_memento_user_key)
-        sample_employee = Employee.query(ancestor=curr_memento_user_key).get()
+        sample_employee = Employee.query(ancestor=MEMENTO_USER_KEY).get()
         model_fields = sample_employee.to_dict()
         jsonStr = json.dumps({"foo":"bar"})
         print(jsonStr)
@@ -167,10 +167,17 @@ class DeleteMementoHandler(webapp2.RequestHandler):
 #            m.key.delete()
         self.redirect("/HRHub")
 
+class DeleteItemHandler(webapp2.RequestHandler):
+    def post(self):
+        item_key = ndb.Key(urlsafe=self.request.get("entity_key"))
+        item_key.delete()
+        self.redirect("/VendorHub")
+
 class AddItemHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         item_name = self.request.get("item_name")
+        item_description = self.request.get("item_description")
         item_price = float(self.request.get("item_price"))
         memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
         curr_memento_user = memento_user_query.get()
@@ -178,7 +185,7 @@ class AddItemHandler(webapp2.RequestHandler):
         existing_items = Item.query(ancestor=curr_memento_user_key)
         alreadyExists = existing_items.filter(ndb.GenericProperty("item_name") == item_name)
         if (alreadyExists.count(limit=1000) == 0):
-            new_item = Item(parent = curr_memento_user_key, item_name = item_name, item_price = item_price)
+            new_item = Item(parent = curr_memento_user_key, item_name = item_name, item_price = item_price, item_description = item_description)
             new_item.put()
             curr_memento_user.user_data.get().inventory.append(new_item.key)
             curr_memento_user.user_data.get().put()
@@ -262,6 +269,7 @@ app = webapp2.WSGIApplication([
     ('/RegisterUser', RegisterUserHandler),
     ('/addmemento', CreateMementoHandler),
     ('/DeleteMemento', DeleteMementoHandler),
+    ('/DeleteItem', DeleteItemHandler),
     ('/AddItem', AddItemHandler),
     ('/DefineEvent', DefineEventHandler)
 ], debug=True)

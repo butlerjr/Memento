@@ -1,9 +1,17 @@
 /*main-yellow = #447733*/
 /*sec-yellow = #339922*/
+.price-change-menu h3,
+.price-change-menu spinbox {
+  display: inline;
+}
+.price-change-menu {
+  display: none;
+}
 .caption {
   background-color: #ffd636;
 }
-.edit-button {
+.edit-button,
+.cancel-button {
   border: 1px solid #fff;
   border-radius: 5px;
   padding: 8px;
@@ -14,7 +22,8 @@
   margin-right: 2%;
   background-color: #ffd636;
 }
-.delete-button {
+.delete-button,
+.save-button {
   border: 1px solid #fff;
   border-radius: 5px;
   padding: 8px;

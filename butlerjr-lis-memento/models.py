@@ -19,6 +19,7 @@ class Memento(ndb.Model):
     
 class Item(ndb.Model):
     item_name = ndb.StringProperty()
+    item_description = ndb.StringProperty()
     item_price = ndb.FloatProperty()
 
 class Event(ndb.Model):

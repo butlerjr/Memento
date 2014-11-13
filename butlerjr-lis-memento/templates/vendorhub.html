@@ -7,12 +7,20 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
   <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css" />
+
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <!-- Latest compiled and minified JavaScript -->
-  <script
-          src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
   <script src="/static/js/vendor.js"></script>
+
+
+
+
 </head>
   
 
@@ -34,7 +42,7 @@
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Calendar</a></li>
+      <li><a href="#">View Order</a></li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Messages <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -83,11 +91,38 @@
         <div class="thumbnail">
           <img src="/static/pic/gift.jpg">
           <div class="caption">
+
             <h3>{{item.item_name}}</h3>
-            <p>Best seller, in excellent condition</p>
+            <p>{{item.item_description}}</p>
+            <h4>Price: <text>${{item.item_price}}</text></h4>
 
             <div class="edit-button">Change Price</div>
-            <div class="delete-button">Delete</div>
+            <div class="delete-button" data-toggle="modal" data-target="#delete-confirmation-modal">Delete
+              <div class="hidden entity-key">{{item.key.urlsafe()}}</div>
+              <div class="hidden name">{{item.item_name}}</div>
+            </div>
+            <br>
+            <br>
+          </div>
+          <div class="caption price-change-menu">
+            <div class="fuelux">
+              <h3>New Price:</h3>
+              <div class="spinbox" data-initialize="spinbox" id="mySpinbox">
+                <input type="text" class="form-control input-mini spinbox-input">
+                <div class="spinbox-buttons btn-group btn-group-vertical">
+                  <button type="button" class="btn btn-default spinbox-up btn-xs">
+                    <span class="glyphicon glyphicon-chevron-up"></span><span class="sr-only">Increase</span>
+                  </button>
+                  <button type="button" class="btn btn-default spinbox-down btn-xs">
+                    <span class="glyphicon glyphicon-chevron-down"></span><span class="sr-only">Decrease</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <br>
+            <br>
+            <div class="cancel-button">Cancel</div>
+            <div class="save-button">Save</div>
             <br>
             <br>
           </div>
@@ -100,8 +135,9 @@
           <div class="caption">
             <h3>FTS Socks</h3>
             <p>Soft, fuzzy, and full of swag</p>
+            <h4>Price: <text>$9.0</text></h4>
             <div class="edit-button">Change Price</div>
-            <div class="delete-button">Delete</div>
+            <div class="delete-button" data-toggle="modal" data-target="#delete-confirmation-modal">Delete</div>
             <br>
             <br>
           </div>
@@ -113,6 +149,7 @@
           <div class="caption">
             <h3>Chocolate Cupcake</h3>
             <p>Soft, chococatey, and sprinkled with rainbow</p>
+            <h4>Price: <text>$5.0</text></h4>
             <div class="edit-button">Change Price</div>
             <div class="delete-button">Delete</div>
             <br>
@@ -126,6 +163,7 @@
           <div class="caption">
             <h3>Fake Product</h3>
             <p>An empty gift box</p>
+            <h4>Price: <text>$42.0</text></h4>
             <div class="edit-button">Change Price</div>
             <div class="delete-button">Delete</div>
             <br>
@@ -137,33 +175,37 @@
       </div>
     </div>
 
-  <div class="list-group">
-    <a class="list-group-item">Dapibus ac facilisis in</a>
-    <div class="panel-body">
-      <p> Price: $100</p>
+  <div id="delete-confirmation-modal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="/DeleteItem" method="POST" class="form-horizontal"
+              role="form">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Confirm Delete</h4>
+          </div>
+          <div class="modal-body">
+            <input class="hidden" name="entity_key">
+            <p>
+              Are you sure you'd like to delete
+              <text id="name">NAME</text>
+              from your inventory?
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Delete</button>
+          </div>
+        </form>
+      </div>
+      <!-- /.modal-content -->
     </div>
-    <a href="#" class="list-group-item">Morbi leo risus</a>
-    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-    <a href="#" class="list-group-item">Vestibulum at eros</a>
-    {% for item in curr_vendor_items %}
-    <a href="#" class="list-group-item">{{item.item_name}}</a>
-    {% endfor %}
+    <!-- /.modal-dialog -->
   </div>
+  <!-- /.modal -->
 
-  </div>
-
-<table>
-{% for item in curr_vendor_items %}
-<tr>
-	<td>
-	{{item.item_name}}
-	</td>
-	<td>
-	${{item.item_price}}
-	</td>
-</tr>
-{% endfor %}
-</table>
 
 <!-- Modal -->
 	<div id='add-item-modal' class="modal fade" tabindex="-1"
@@ -187,6 +229,14 @@
 									class="form-control" placeholder="Item Name">
 							</div>
 						</div>
+                      <div class="form-group">
+                        <label for="description-input" class="col-sm-2 control-label">Item
+                          Description:</label>
+                        <div class="col-sm-10">
+                          <input id="item_description" name="item_description" type="text"
+                                 class="form-control" placeholder="">
+                        </div>
+                      </div>
 						<div class="form-group">
 							<label for="price-input" class="col-sm-2 control-label">Price:
 							</label>
@@ -209,10 +259,6 @@
 	<!-- /.modal -->
 
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  <script src="/static/js/javascript.js"></script>
+
 </body>
 </html>
