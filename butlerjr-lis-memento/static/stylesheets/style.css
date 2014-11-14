@@ -49,6 +49,9 @@
   padding: 15px;
   margin-bottom: 30px;
 }
+.d-dates {
+  color: #fff;
+}
 .navbar-default {
   background-color: #ffd636;
   border-color: #e5bd20;
