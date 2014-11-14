@@ -3,22 +3,35 @@
  */
 var main = function(){
     console.log("Javascipt loaded successfully.");
-    $("#james-button").click(
+    $(".customer-button").click(
         function(){
-            console.log("James button clicked");
-            $(".active-panel").removeClass("active-panel");
-            $("#james-summary-panel").toggle("active-panel");
+
+            var buttonid = $(this).attr('id');
+            console.log("Button clicked:" + buttonid);
+            var panelid = buttonid.replace("-button", "-panel");
+            console.log("Panelid:" + panelid);
+
+            if ($('#' + panelid).hasClass("active-summary-panel")){
+                console.log("The panel is currently displayed");
+                $('#' + panelid).toggle('400', function() {
+                    $(this).toggleClass("active-summary-panel");
+                });
+
+                $('#initial-panel').toggle('400', function() {
+                    $(this).toggleClass("active-summary-panel");
+                });
+            } else {
+                console.log("The panel is not currently displayed");
+                $(".active-summary-panel").toggle('400', function() {
+                    $(this).toggleClass("active-summary-panel");
+                });
+                $('#' + panelid).toggle('400', function() {
+                    $(this).toggleClass("active-summary-panel");
+                });
+            }
         }
     );
 
-
-    $("#robouser-button").click(
-        function(){
-            console.log("James button clicked");
-            $(".active-panel").removeClass("active-panel");
-            $("#robouser-summary-panel").toggle("active-panel");
-        }
-    );
 }
 
 $(document).ready(main);

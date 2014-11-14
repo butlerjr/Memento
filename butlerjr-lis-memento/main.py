@@ -32,7 +32,7 @@ import models
 
 
 jinja_env = jinja2.Environment(
-  loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+  loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),extensions=["jinja2.ext.do",],
   autoescape=True)
 
 MEMENTO_USER_KEY = ndb.Key("Entity", "memento_user_root")
@@ -106,32 +106,15 @@ class VendorHandler(webapp2.RequestHandler):
         
         curr_vendor_orders = Order.query(ancestor=curr_memento_user_key)
         
-        print "Orders:"
-        for order in curr_vendor_orders:
-            print "Order" + str(order)
-            currPrice = 0;
-            order_thing = 0;
-            all_items_in_order = []
-            all_special_order_dict = []
-            for memento_key in order.memento:
-                item_name = memento_key.get().item.get().item_name
-                all_items_in_order.append(item_name)
-            
-            for memento_key in order.memento:
-                item_company = memento_key.get().item.parent().get().user_data.get().company_name
-                item_name = memento_key.get().item.get().item_name
-                item_price = memento_key.get().item.get().item_price
-                item_frequency = all_items_in_order.count(item_name)
-                special_order_dict = {"company": item_company, "item_name":item_name, "item_price":item_price, "item_frequency":item_frequency}
-                if special_order_dict not in all_special_order_dict:
-                    all_special_order_dict.append(special_order_dict)
-        print all_special_order_dict
-        self.response.write(template.render({"user":user, "logout_url": logout_url, "curr_vendor_items": curr_vendor_items, "orders": all_special_order_dict}))
+
+        self.response.write(template.render({"user":user, "logout_url": logout_url, "curr_vendor_items": curr_vendor_items}))
         self.response.out.write(greeting)
         
 class HRHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
+
+
         
         memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
         curr_memento_user = memento_user_query.get()
@@ -305,6 +288,8 @@ class ViewOrderHandler(webapp2.RequestHandler):
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
         curr_vendor_orders = Order.query(ancestor=curr_memento_user_key)
+        all_companies = []
+        all_special_order_dict = []
         for order in curr_vendor_orders:
             print "Order" + str(order)
             all_items_in_order = []
@@ -314,7 +299,9 @@ class ViewOrderHandler(webapp2.RequestHandler):
                 all_items_in_order.append(item_name)
             
             for memento_key in order.memento:
-                item_company = memento_key.get().item.parent().get().user_data.get().company_name
+                item_company = order.to_company.get().user_data.get().company_name
+                if item_company not in all_companies:
+                    all_companies.append(item_company)
                 item_name = memento_key.get().item.get().item_name
                 item_price = memento_key.get().item.get().item_price
                 item_frequency = all_items_in_order.count(item_name)
@@ -322,7 +309,7 @@ class ViewOrderHandler(webapp2.RequestHandler):
                 if special_order_dict not in all_special_order_dict:
                     all_special_order_dict.append(special_order_dict)
         print all_special_order_dict
-        self.response.write(template.render({"user":user, "logout_url": logout_url, "orders": all_special_order_dict}))
+        self.response.write(template.render({"user":user, "logout_url": logout_url, "orders": all_special_order_dict, "all_companies":all_companies}))
 
 
 app = webapp2.WSGIApplication([

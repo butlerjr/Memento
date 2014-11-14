@@ -63,30 +63,32 @@
                 <li class="active">
                     <a>Customers</a>
                 </li>
-            <li><a id="james-button">James Buttler</a></li>
-            <li><a id="robouser-button">Robouser</a></li>
+            <li><a class="customer-button" id="james-button">James Buttler</a></li>
+            <li><a class="customer-button" id="robouser-button">Robouser</a></li>
             <li><a>McDongDong</a></li>
             <li><a>Fake Customer</a></li>
+            {% for company in all_companies %}
+             <li><a class="customer-button" id={{company + "-button"}}>
+                 {{company}}
+             </a></li>
+            {% endfor %}
             </ul>
         </div>
         <div class="panel panel-default col-xs-12 col-md-9">
 
-            <div class="panel-body summary-panel active-panel " id="initial-panel">
+            <div class="panel-body summary-panel active-summary-panel" id="initial-panel">
                 <div class="jumbotron">
                     <h2>Hello, {{user.nickname()}}</h2>
                     <p>Select a customer and to view the orders.</p>
-
-                    <p>{% for order in orders %}
-                        {{order.item_name}}
-                        {% endfor %}</p>
+                    
                  </div>
 
 
 
             </div>
 
-            </div>
-            <div class="panel-body summary-panel" id="james-summary-panel">
+
+            <div class="panel-body summary-panel" id="james-panel">
             <div class="page-header" >
                 <h1>Summary of James Buttler's Orders </h1>
             </div>
@@ -128,10 +130,10 @@
                         </tr>
                     </tbody>
                 </table>
-
             </div>
 
-            <div class="panel-body summary-panel" id="robouser-summary-panel">
+
+            <div class="panel-body summary-panel" id="robouser-panel">
                 <div class="page-header">
                 <h1>Summary of Robouser's Orders </h1>
                 </div>
@@ -183,6 +185,58 @@
                 </table>
 
             </div>
+
+            {% for company in all_companies %}
+            <div class="panel-body summary-panel" id={{company+ "-panel"}}>
+                <div class="page-header" >
+                    <h1>Summary of {{company}}'s Orders </h1>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th></th>
+                        <th>Unit Price</th>
+                        <th></th>
+                        <th>Total Revenue</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                    {% if order.company_name == company %}
+                    <tr>
+                        <td>{{order.item_name}}</td>
+                        <td>{{order.item_frequency}}</td>
+                        <td>x</td>
+                        <td>${{order.item_price}}</td>
+                        <td>=</td>
+                        <td>${{order.item_frequency * order.item_price}}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Sum Total:</td>
+
+                        <td>${% set helperarray = []%}
+                            {% for order in orders %}
+                            {% if order.company_name == company %}
+                            {% do helperarray.append(order.item_frequency * order.item_price) %}
+                            {% endif %}
+                            {% endfor %}
+                            {{helperarray|sum}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
