@@ -171,6 +171,7 @@ class CreateMementoHandler(webapp2.RequestHandler):
                 print "Memento Keys:" + str(existing_order.memento)
             else:
                 new_order = Order(parent = item.key.parent(), to_company = curr_memento_user_key, memento=[new_memento.key])
+                print "SHOULD BE PUTTING NEW ORDER"
                 new_order.put()
         else:
             memento_key = ndb.Key(urlsafe=self.request.get("entity_key"))
@@ -258,7 +259,7 @@ class RegisterUserHandler(webapp2.RequestHandler):
                 new_memento_user.put()
                 self.redirect('/VendorHub')
             else:
-                new_HR = HRUser(parent = new_memento_user.key, company_name="test_company", mementos=[])
+                new_HR = HRUser(parent = new_memento_user.key, company_name=self.request.get("company"), mementos=[])
                 new_HR.put()
                 new_memento_user.user_data = new_HR.key
                 new_memento_user.put()

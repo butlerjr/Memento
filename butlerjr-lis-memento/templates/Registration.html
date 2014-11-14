@@ -3,55 +3,146 @@
 <head>
 <meta charset="utf-8">
 <title>Memento</title>
+<style>
+#login {
+	padding-top: 50px
+}
+
+#login .form-wrap {
+	width: 30%;
+	margin: 0 auto;
+}
+
+#login h1 {
+	color: #1fa67b;
+	font-size: 18px;
+	text-align: center;
+	font-weight: bold;
+	padding-bottom: 20px;
+}
+
+#login .form-group {
+	margin-bottom: 25px;
+}
+
+#login .checkbox {
+	margin-bottom: 20px;
+	position: relative;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+#login .checkbox.show:before {
+	content: '\e013';
+	color: #1fa67b;
+	font-size: 17px;
+	margin: 1px 0 0 3px;
+	position: absolute;
+	pointer-events: none;
+	font-family: 'Glyphicons Halflings';
+}
+
+#login .checkbox .character-checkbox {
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+#login .checkbox .label {
+	color: #6d6d6d;
+	font-size: 13px;
+	font-weight: normal;
+}
+
+#login .btn.btn-custom {
+	font-size: 14px;
+	margin-bottom: 20px;
+}
+
+#login .forget {
+	font-size: 13px;
+	text-align: center;
+	display: block;
+}
+
+                                                body {
+                background: #FFFFFF
+     }
+           .main {
+                width: 50%;
+                margin-top: 10%;
+                margin-left: auto;
+                margin-right: auto;
+                background: #FFFFC2;
+                height: 100%;
+                padding-bottom: 3%;
+                border-radius: 10px;
+                border-style:solid;
+                border-width:3px;
+               
+            }
+            .container {
+                width: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+/*    --------------------------------------------------
+	:: Inputs & Buttons
+	-------------------------------------------------- */
+.form-control {
+	color: #212121;
+}
+
+.btn-custom {
+	color: #fff;
+	background-color: #1fa67b;
+}
+
+.btn-custom:hover, .btn-custom:focus {
+	color: #fff;
+}
+</style>
+
 </head>
 <body>
-<div class="container">
-        <div class="row centered-form">
-        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-        	<div class="panel panel-default">
-        		<div class="panel-heading">
-			    		<h3 class="panel-title">Welcome to Memento! No account is associated with this e-mail, please create one!</h3>
-			 			</div>
-			 			<div class="panel-body">
-			    		<form action = "/RegisterUser" method = "post">
-			    			<div class="row">
-			    				<div class="col-xs-6 col-sm-6 col-md-6">
-			    					<div class="form-group">
-			                <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name">
-			    					</div>
-			    				</div>
-			    				<div class="col-xs-6 col-sm-6 col-md-6">
-			    					<div class="form-group">
-			    						<input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name">
-			    					</div>
-			    				</div>
-			    			</div>
-
-			    			<div class="form-group">
-			    				<input type="text" name="company" id="company" class="form-control input-sm" placeholder="Company Name">
-			    			</div>
-
-			    			<div class="row">
-			    				<div class="col-xs-6 col-sm-6 col-md-6">
-			    					<div class="form-group">
-			    						<input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password">
-			    					</div>
-			    				</div>
-			    				<div class="col-xs-6 col-sm-6 col-md-6">
-			    					<div class="form-group">
-			    						<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password">
-			    					</div>
-			    				</div>
-			    				<input type="checkbox" id="isVendor" name="isVendor" value="isVendor">Are you registering as a vendor?<br>
-			    			</div>
-			    			
-			    			<input type="submit" value="Register" class="btn btn-info btn-block">
-			    		
-			    		</form>
-			    	</div>
-	    		</div>
-    		</div>
-    	</div>
-    </div>
+	<div class="main">
+		<form action="/RegisterUser" method="POST">
+			<section id="login">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-wrap">
+							<div class="form-group">
+							<center><h2>Looks like it's your first time here! What's the name of your company?</h2></center>
+								<center><input type="text" name="company" id="company"
+									class="form-control" placeholder="Company Name" style="border-radius:5px"> </center>
+							</div>
+							<div class="form-group">
+								<center><input type="checkbox" id="isVendor" name="isVendor"
+								value="isVendor">I'm signing up as a vendor, not an HR
+							professional.</center>
+							</div>
+							
+							<center><button type="submit" id="create-share-submit-button" class="btn btn-custom btn-lg btn-block">Register with Memento</button></center>
+							
+							
+						</div>
+						<!-- /.col-xs-12 -->
+					</div>
+					<!-- /.row -->
+				</div>
+				</div>
+				<!-- /.container -->
+			</section>
+		</form>
+	</div>
 </body>
 </html>
