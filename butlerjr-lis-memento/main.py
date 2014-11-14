@@ -316,6 +316,7 @@ class ViewOrderHandler(webapp2.RequestHandler):
                 item_price = memento_key.get().item.get().item_price
                 item_frequency = all_items_in_order.count(item_name)
                 special_order_dict = {"company_name": item_company, "item_name":item_name, "item_price":item_price, "item_frequency":item_frequency, "all_companies":all_companies}
+                print special_order_dict
                 if special_order_dict not in all_special_order_dict:
                     all_special_order_dict.append(special_order_dict)
         print all_special_order_dict
