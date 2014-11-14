@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
-    <script src="/static/js/vendor.js"></script>
+    <script src="/static/js/order.js"></script>
 
 
 
@@ -63,13 +63,8 @@
                 <li class="active">
                     <a>Customers</a>
                 </li>
-<<<<<<< HEAD
             <li><a class="customer-button" id="james-button">James Buttler</a></li>
             <li><a class="customer-button" id="robouser-button">Robouser</a></li>
-=======
-            <li><a>James Buttler</a></li>
-            <li><a>Robouser</a></li>
->>>>>>> eecd1af75d1eeb01fac9a812ccd8a1a91b488444
             <li><a>McDongDong</a></li>
             <li><a>Fake Customer</a></li>
             {% for company in all_companies %}
@@ -88,19 +83,13 @@
                     <p>Select a customer and to view the orders.</p>
                     
                  </div>
-
-
-
             </div>
 
 
             <div class="panel-body summary-panel" id="james-panel">
-
-           
-            <div class="panel-body">
-            <div class="page-header" >
+                <div class="page-header" >
                 <h1>Summary of James Buttler's Orders </h1>
-            </div>
+                </div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -141,12 +130,9 @@
                 </table>
             </div>
 
-<<<<<<< HEAD
+
 
             <div class="panel-body summary-panel" id="robouser-panel">
-=======
-            <div class="panel-body">
->>>>>>> eecd1af75d1eeb01fac9a812ccd8a1a91b488444
                 <div class="page-header">
                 <h1>Summary of Robouser's Orders </h1>
                 </div>
@@ -196,11 +182,10 @@
                     </tr>
                     </tbody>
                 </table>
-
             </div>
 
             {% for company in all_companies %}
-            <div class="panel-body summary-panel" id={{company+ "-panel"}}>
+            <div class="panel-body summary-panel" id={{company+ "-panel"}} >
                 <div class="page-header" >
                     <h1>Summary of {{company}}'s Orders </h1>
                 </div>
