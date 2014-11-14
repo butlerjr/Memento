@@ -143,52 +143,27 @@
 		<!-- /.navbar-collapse -->
 	</nav>
 
+	<div class="container">
 	<div class="jumbotron">
-		<div class="container">
 			<h2>
 				Welcome to Memento, {{user.nickname()}}!
 				<h2>
 					<p>Make a memento and send swags to employees.
 					<p>
-		</div>
+
 	</div>
 
 	<div class="memento-section">
 		<div class="container">
 			<div class="row">
-				<div class="memento col-md-4">
-					<h3>Fake Testing Momento</h3>
-					<p>All I want for my birthday</p>
-					<p>A BIG FAT CUPCAKE
-					<p>
-					<div class="edit-button">Edit</div>
-					<div class="delete-button">Delete</div>
-
-				</div>
-
-				<div class="memento col-md-4">
-					<h3>Fake Testing Momento no.2</h3>
-					<p>All I want for my birthday</p>
-					<p>FTS socks
-					<p>
-					<div class="edit-button">Edit</div>
-					<div class="delete-button">Delete</div>
-				</div>
-				<div class="memento col-md-4">
-					<h3>Memento Name</h3>
-					<p>Event</p>
-					<p>Item</p>
-					<div class="edit-button">Edit</div>
-					<button class="delete-button">Delete</button>
-				</div>
 
 				{% for memento in all_mementos %}
-				<div class="memento col-md-4">
-
+				<div class="col-md-4">
+					<div class="memento">
 
 					<h3>{{memento.memento_name}} Memento</h3>
 					<div class="occurrences-display" data-toggle="modal"
-						data-target="#memento-instances-modal">
+						 data-target="#memento-instances-modal">
 						<h4>Click here to see delivery dates</h4>
 						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
 						<div class="hidden occurrences">
@@ -208,23 +183,59 @@
 					<p>Item: {{memento.item.get().item_name}}
 					<p>
 					<div class="edit-button" data-toggle="modal"
-						data-target="#insert-memento-modal">
+						 data-target="#insert-memento-modal">
 						Edit
 						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
 						<div class="hidden name">{{memento.memento_name}}</div>
 					</div>
 					<div class="delete-button" data-toggle="modal"
-						data-target="#delete-confirmation-modal">
+						 data-target="#delete-confirmation-modal">
 						Delete
 						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
 						<div class="hidden name">{{memento.memento_name}}</div>
 					</div>
+					</div>
+
 				</div>
 				{% endfor %}
 
 
+				<div class="col-md-4">
+					<div class="memento">
+					<h3>Fake Testing Momento</h3>
+					<p>All I want for my birthday</p>
+					<p>A BIG FAT CUPCAKE
+					<p>
+					<div class="edit-button">Edit</div>
+					<div class="delete-button">Delete</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="memento">
+					<h3>Fake Testing Momento no.2</h3>
+					<p>All I want for my birthday</p>
+					<p>FTS socks
+					<p>
+					<div class="edit-button">Edit</div>
+					<div class="delete-button">Delete</div>
+					</div>
+				</div>
+
+				<div class="memento col-md-4">
+					<h3>Memento Name</h3>
+					<p>Event</p>
+					<p>Item</p>
+					<div class="edit-button">Edit</div>
+					<button class="delete-button">Delete</button>
+				</div>
+
+
+
+
 			</div>
 		</div>
+	</div>
 	</div>
 
 
