@@ -144,7 +144,7 @@ class HRHandler(webapp2.RequestHandler):
         all_mementos = Memento.query(ancestor=curr_memento_user_key)
         all_vendors = Vendor.query(ancestor=MEMENTO_USER_KEY)
         all_events = Event.query(ancestor=curr_memento_user_key)
-        sample_employee = Employee.query(ancestor=MEMENTO_USER_KEY).get()
+        sample_employee = ndb.gql("SELECT * FROM Employee").get()
         model_fields = sample_employee.to_dict()
         jsonStr = json.dumps({"foo":"bar"})
         print(jsonStr)
@@ -305,6 +305,7 @@ class ViewOrderHandler(webapp2.RequestHandler):
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
         curr_vendor_orders = Order.query(ancestor=curr_memento_user_key)
+        all_special_order_dict = []
         for order in curr_vendor_orders:
             print "Order" + str(order)
             all_items_in_order = []
@@ -314,7 +315,7 @@ class ViewOrderHandler(webapp2.RequestHandler):
                 all_items_in_order.append(item_name)
             
             for memento_key in order.memento:
-                item_company = memento_key.get().item.parent().get().user_data.get().company_name
+                item_company = order.to_company.get().user_data.get().company_name
                 item_name = memento_key.get().item.get().item_name
                 item_price = memento_key.get().item.get().item_price
                 item_frequency = all_items_in_order.count(item_name)

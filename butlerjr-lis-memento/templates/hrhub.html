@@ -131,8 +131,13 @@
 			<ul class="nav navbar-nav navbar-right">
 
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Logged in as {{user.nickname()}} <b class="caret"></b></a>
-				</li>
+					data-toggle="dropdown">Logged in as {{user.nickname()}} <b
+						class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href={{logout_url}}>Log out</a></li>
+					</ul></li>
+
+
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->
@@ -161,20 +166,21 @@
 
 				</div>
 
-			<div class="memento col-md-4">
-				<h3>Fake Testing Momento no.2 </h3>
-				<p>All I want for my birthday</p>
-				<p>FTS socks<p>
-				<div class="edit-button">Edit</div>
-				<div class="delete-button">Delete</div>
-			</div>
-			<div class="memento col-md-4">
-				<h3>Memento Name</h3>
-				<p>Event</p>
-				<p>Item</p>
-				<div class="edit-button">Edit</div>
-				<button class="delete-button">Delete</button>
-			</div>
+				<div class="memento col-md-4">
+					<h3>Fake Testing Momento no.2</h3>
+					<p>All I want for my birthday</p>
+					<p>FTS socks
+					<p>
+					<div class="edit-button">Edit</div>
+					<div class="delete-button">Delete</div>
+				</div>
+				<div class="memento col-md-4">
+					<h3>Memento Name</h3>
+					<p>Event</p>
+					<p>Item</p>
+					<div class="edit-button">Edit</div>
+					<button class="delete-button">Delete</button>
+				</div>
 
 				{% for memento in all_mementos %}
 				<div class="memento col-md-4">
@@ -239,9 +245,9 @@
 								<select id="item_input" name="item_input" class="form-control">
 									{% for vendor in all_vendors %} {% for item in
 									vendor.inventory%}
-									<option value="{{item.get().item_name}}">{{vendor.company_name}} ||
-										{{item.get().item_name}} (${{item.get().item_price}}/unit)</option> {%
-									endfor %} {% endfor %}
+									<option value="{{item.get().item_name}}">{{vendor.company_name}}
+										|| {{item.get().item_name}} (${{item.get().item_price}}/unit)</option>
+									{% endfor %} {% endfor %}
 								</select>
 							</div>
 						</div>
@@ -368,15 +374,6 @@
 		<!-- /.modal-dialog -->
 	</div>
 	<!-- /.modal -->
-
-
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<!-- Latest compiled and minified JavaScript -->
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<script src="/static/js/javascript.js"></script>
 
 </body>
 </html>
