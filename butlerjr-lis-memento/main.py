@@ -169,9 +169,10 @@ class CreateMementoHandler(webapp2.RequestHandler):
         item = Item.query(ancestor=MEMENTO_USER_KEY).filter(ndb.GenericProperty("item_name") == item_name).get()
         existing_mementos = Memento.query(ancestor=curr_memento_user_key)
         alreadyExists = existing_mementos.filter(ndb.GenericProperty("memento_name") == memento_name)
-        if (alreadyExists.count(limit=1000) == 0):
+        if not self.request.get("entity_key"):
             new_memento = Memento(parent = curr_memento_user_key, memento_name = memento_name, event = event.key, item = item.key)
             new_memento.put()
+            
             existing_orders = Order.query(ancestor=MEMENTO_USER_KEY)
             orderAlreadyExists = existing_orders.filter(ndb.GenericProperty("to_company") == curr_memento_user_key)
             hasOrders = False
@@ -188,7 +189,16 @@ class CreateMementoHandler(webapp2.RequestHandler):
             else:
                 new_order = Order(parent = item.key.parent(), to_company = curr_memento_user_key, memento=[new_memento.key])
                 new_order.put()
+        else:
+            memento_key = ndb.Key(urlsafe=self.request.get("entity_key"))
+            memento = memento_key.get()
+            memento.memento_name = memento_name
+            memento.event = event.key
+            memento.item = item.key
+            memento.put()
         self.redirect("/HRHub")
+        
+        
         
 
 class DeleteMementoHandler(webapp2.RequestHandler):
@@ -286,9 +296,8 @@ class DefineEventHandler(webapp2.RequestHandler):
         
         for occurrence in occurrences:
             employee_dict = {"employee_name" : occurrence.employee_name, "employee_maternity_start": occurrence.employee_maternity_start, "employee_birthday": occurrence.employee_birthday, "employee_anniversary":occurrence.employee_anniversary, "employee_id":occurrence.employee_id}
-            dict_to_add = {employee_dict["employee_name"]: str(employee_dict[selected_field])}
-            jsonStr = json.dumps(dict_to_add)
-            name_and_date.append(jsonStr)
+            str_to_add = "For " + str(employee_dict["employee_name"]) + " on " + str(employee_dict[selected_field])
+            name_and_date.append(str_to_add)
             
         
         new_event = Event(parent=curr_memento_user_key, event_name=self.request.get("event_name"), occurrences=name_and_date)
@@ -305,6 +314,7 @@ class ViewOrderHandler(webapp2.RequestHandler):
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
         curr_vendor_orders = Order.query(ancestor=curr_memento_user_key)
+        all_companies = []
         all_special_order_dict = []
         for order in curr_vendor_orders:
             print "Order" + str(order)
@@ -316,10 +326,12 @@ class ViewOrderHandler(webapp2.RequestHandler):
             
             for memento_key in order.memento:
                 item_company = order.to_company.get().user_data.get().company_name
+                if item_company not in all_companies:
+                    all_companies.append(item_company)
                 item_name = memento_key.get().item.get().item_name
                 item_price = memento_key.get().item.get().item_price
                 item_frequency = all_items_in_order.count(item_name)
-                special_order_dict = {"company_name": item_company, "item_name":item_name, "item_price":item_price, "item_frequency":item_frequency}
+                special_order_dict = {"company_name": item_company, "item_name":item_name, "item_price":item_price, "item_frequency":item_frequency, "all_companies":all_companies}
                 if special_order_dict not in all_special_order_dict:
                     all_special_order_dict.append(special_order_dict)
         print all_special_order_dict

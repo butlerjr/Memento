@@ -183,12 +183,26 @@
 				</div>
 
 				{% for memento in all_mementos %}
-				<div class="memento col-md-4">
+				<div class="memento col-md-4" data-toggle="modal" data-target="#memento-instances-modal">
+					<div class = "hidden entity-key">{{memento.key.urlsafe()}}</div>
+					<div class="hidden occurrences">
+					<table class="table">
+					{% for occurrence in memento.event.get().occurrences %}
+					<center>{{occurrence}}</center>
+					{% endfor %}
+					</table>
+					
+					</div>
+					
 					<h3>{{memento.memento_name}} Memento</h3>
 					<p>Event: {{memento.event.get().event_name}}</p>
 					<p>Item: {{memento.item.get().item_name}}
 					<p>
-					<div class="edit-button">Edit</div>
+					<div class="edit-button" data-toggle="modal" data-target="#insert-memento-modal">
+						Edit
+						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
+						<div class="hidden name">{{memento.memento_name}}</div>
+						</div>
 					<div class="delete-button" data-toggle="modal"
 						data-target="#delete-confirmation-modal">
 						Delete
@@ -298,6 +312,29 @@
 	</div>
 	<!-- /.modal -->
 
+
+	<div id="memento-instances-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title">Delivery Dates</h4>
+					</div>
+					<div class="modal-body">
+						<input class="hidden" name="entity_key">
+						<p>
+						<text id="occurrences">TEST</text>
+						</p>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
 
 	<div id="delete-confirmation-modal" class="modal fade">
 		<div class="modal-dialog">

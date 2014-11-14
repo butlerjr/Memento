@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="//www.fuelcdn.com/fuelux/3.2.1/css/fuelux.min.css">
     <!-- Latest compiled and minified JavaScript -->
     <script src="//www.fuelcdn.com/fuelux/3.2.1/js/fuelux.min.js"></script>
-    <script src="/static/js/order.js"></script>
+    <script src="/static/js/vendor.js"></script>
 
 
 
@@ -63,30 +63,25 @@
                 <li class="active">
                     <a>Customers</a>
                 </li>
-            <li><a id="james-button">James Buttler</a></li>
-            <li><a id="robouser-button">Robouser</a></li>
+            <li><a>James Buttler</a></li>
+            <li><a>Robouser</a></li>
             <li><a>McDongDong</a></li>
             <li><a>Fake Customer</a></li>
             </ul>
         </div>
         <div class="panel panel-default col-xs-12 col-md-9">
 
-            <div class="panel-body summary-panel active-panel " id="initial-panel">
+            <div class="panel-body" id="initial-panel">
                 <div class="jumbotron">
                     <h2>Hello, {{user.nickname()}}</h2>
                     <p>Select a customer and to view the orders.</p>
-
-                    <p>{% for order in orders %}
-                        {{order.item_name}}
-                        {% endfor %}</p>
-                 </div>
-
-
+                    {% for order in orders %}
+                    {{order.item_name}}
+                    {% endfor %}
 
             </div>
-
             </div>
-            <div class="panel-body summary-panel" id="james-summary-panel">
+            <div class="panel-body">
             <div class="page-header" >
                 <h1>Summary of James Buttler's Orders </h1>
             </div>
@@ -131,7 +126,7 @@
 
             </div>
 
-            <div class="panel-body summary-panel" id="robouser-summary-panel">
+            <div class="panel-body">
                 <div class="page-header">
                 <h1>Summary of Robouser's Orders </h1>
                 </div>
