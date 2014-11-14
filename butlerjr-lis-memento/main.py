@@ -43,7 +43,37 @@ ITEM_KEY = ndb.Key("Entity", "item_root")
 
 class MyHandler(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
+        """
+        all_employees = ndb.gql("SELECT * FROM Employee")
+        for employee in all_employees:
+            employee.key.delete()
+        
+        Sarah = Employee(parent = MEMENTO_USER_KEY,
+                   employee_name = "Sarah Keyes",
+                   employee_id = 12345679, 
+                   employee_birthday = datetime.date(1960, 10, 3), 
+                   employee_anniversary = datetime.date(1987, 02, 3), 
+                   employee_maternity_start= datetime.date(1987, 1, 3))
+        Sarah.put()
+        
+        Bob = Employee(parent = MEMENTO_USER_KEY,
+                   employee_name = "Bob Martin",
+                   employee_id = 12345678, 
+                   employee_birthday = datetime.date(1957, 10, 5), 
+                   employee_anniversary = datetime.date(1980, 02, 2), 
+                   employee_maternity_start= datetime.date(1981, 1, 9))
+        Bob.put()
+        
+        Lars = Employee(parent = MEMENTO_USER_KEY,
+                   employee_name = "Lars Von Trier",
+                   employee_id = 12345672, 
+                   employee_birthday = datetime.date(1930, 11, 9), 
+                   employee_anniversary = datetime.date(1950, 02, 2), 
+                   employee_maternity_start= datetime.date(1981, 1, 9))
+        Lars.put()
+        """
+        
+        user = users.get_current_user()    
         if user:
             q = ndb.gql("SELECT * FROM MementoUser WHERE user_name = :1 AND isVendor = True", user.nickname())
             if (q.count(limit=1000) > 0):
@@ -106,13 +136,6 @@ class HRHandler(webapp2.RequestHandler):
         memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
         curr_memento_user = memento_user_query.get()
         curr_memento_user_key = curr_memento_user.key
-        bob = Employee(parent = MEMENTO_USER_KEY,
-                       employee_name = "Sarah Keyes",
-                       employee_id = 12345679, 
-                       employee_birthday = datetime.date(1987, 10, 3), 
-                       employee_anniversary = datetime.date(1987, 02, 3), 
-                       employee_maternity_start= datetime.date(1987, 1, 3))
-        bob.put()
         
         greeting = ('Welcome to HR Page, %s! (<a href="%s">sign out</a>)' %
                     (user.nickname(), users.create_logout_url('/')))
@@ -277,7 +300,29 @@ class ViewOrderHandler(webapp2.RequestHandler):
         user = users.get_current_user()
         logout_url = users.create_logout_url('/')
         template = jinja_env.get_template("templates/order.html")
-        self.response.write(template.render({"user":user, "logout_url": logout_url}))
+        
+        memento_user_query = ndb.gql("SELECT * from MementoUser WHERE user_name = :1", user.nickname())
+        curr_memento_user = memento_user_query.get()
+        curr_memento_user_key = curr_memento_user.key
+        curr_vendor_orders = Order.query(ancestor=curr_memento_user_key)
+        for order in curr_vendor_orders:
+            print "Order" + str(order)
+            all_items_in_order = []
+            all_special_order_dict = []
+            for memento_key in order.memento:
+                item_name = memento_key.get().item.get().item_name
+                all_items_in_order.append(item_name)
+            
+            for memento_key in order.memento:
+                item_company = memento_key.get().item.parent().get().user_data.get().company_name
+                item_name = memento_key.get().item.get().item_name
+                item_price = memento_key.get().item.get().item_price
+                item_frequency = all_items_in_order.count(item_name)
+                special_order_dict = {"company_name": item_company, "item_name":item_name, "item_price":item_price, "item_frequency":item_frequency}
+                if special_order_dict not in all_special_order_dict:
+                    all_special_order_dict.append(special_order_dict)
+        print all_special_order_dict
+        self.response.write(template.render({"user":user, "logout_url": logout_url, "orders": all_special_order_dict}))
 
 
 app = webapp2.WSGIApplication([
