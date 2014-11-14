@@ -75,8 +75,16 @@
                 <div class="jumbotron">
                     <h2>Hello, {{user.nickname()}}</h2>
                     <p>Select a customer and to view the orders.</p>
-                    <p></p>
+
+                    <p>{% for order in orders %}
+                        {{order.item_name}}
+                        {% endfor %}</p>
                  </div>
+
+
+
+            </div>
+
             </div>
             <div class="panel-body summary-panel" id="james-summary-panel">
             <div class="page-header" >
