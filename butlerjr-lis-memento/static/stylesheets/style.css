@@ -4,6 +4,12 @@
 .price-change-menu spinbox {
   display: inline;
 }
+.summary-panel {
+  display: none;
+}
+.active-panel {
+  display: block;
+}
 .price-change-menu {
   display: none;
 }
