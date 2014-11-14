@@ -183,26 +183,36 @@
 				</div>
 
 				{% for memento in all_mementos %}
-				<div class="memento col-md-4" data-toggle="modal" data-target="#memento-instances-modal">
-					<div class = "hidden entity-key">{{memento.key.urlsafe()}}</div>
-					<div class="hidden occurrences">
-					<table class="table">
-					{% for occurrence in memento.event.get().occurrences %}
-					<center>{{occurrence}}</center>
-					{% endfor %}
-					</table>
-					
-					</div>
-					
+				<div class="memento col-md-4">
+
+
 					<h3>{{memento.memento_name}} Memento</h3>
+					<div class="occurrences-display" data-toggle="modal"
+						data-target="#memento-instances-modal">
+						<h4>Click here to see delivery dates</h4>
+						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
+						<div class="hidden occurrences">
+							<table class="table">
+								{% for occurrence in memento.event.get().occurrences %}
+								<tr>
+									<td>
+										<center>{{occurrence}}</center>
+									</td>
+								</tr>
+								{% endfor %}
+							</table>
+
+						</div>
+					</div>
 					<p>Event: {{memento.event.get().event_name}}</p>
 					<p>Item: {{memento.item.get().item_name}}
 					<p>
-					<div class="edit-button" data-toggle="modal" data-target="#insert-memento-modal">
+					<div class="edit-button" data-toggle="modal"
+						data-target="#insert-memento-modal">
 						Edit
 						<div class="hidden entity-key">{{memento.key.urlsafe()}}</div>
 						<div class="hidden name">{{memento.memento_name}}</div>
-						</div>
+					</div>
 					<div class="delete-button" data-toggle="modal"
 						data-target="#delete-confirmation-modal">
 						Delete
@@ -316,18 +326,18 @@
 	<div id="memento-instances-modal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">
-							<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-						</button>
-						<h4 class="modal-title">Delivery Dates</h4>
-					</div>
-					<div class="modal-body">
-						<input class="hidden" name="entity_key">
-						<p>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">Delivery Dates</h4>
+				</div>
+				<div class="modal-body">
+					<input class="hidden" name="entity_key">
+					<p>
 						<text id="occurrences">TEST</text>
-						</p>
-					</div>
+					</p>
+				</div>
 				</form>
 			</div>
 			<!-- /.modal-content -->

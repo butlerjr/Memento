@@ -13,7 +13,7 @@ var main = function() {
 		$(this).removeClass("hover-button");
 	});
 
-	$(".memento").click(function() {
+	$(".occurrences-display").click(function() {
 		entityKey = $(this).find(".entity-key").html()
 		occurrences = $(this).find(".occurrences").html()
 		$("#memento-instances-modal #occurrences").html(occurrences);
